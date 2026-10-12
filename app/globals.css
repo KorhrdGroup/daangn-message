@@ -14,7 +14,7 @@
 }
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 88px; }
-body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif; font-size: 1.125rem; line-height: 1.75; word-break: keep-all; overflow-wrap: anywhere; -webkit-font-smoothing: antialiased; }
+body { margin: 0; overflow-x: clip; background: var(--paper); color: var(--ink); font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif; font-size: 1.125rem; line-height: 1.75; word-break: keep-all; overflow-wrap: anywhere; -webkit-font-smoothing: antialiased; }
 button, input, select { font: inherit; }
 button, a, input, summary { -webkit-tap-highlight-color: transparent; }
 button { cursor: pointer; }
@@ -317,6 +317,8 @@ img { display: block; max-width: 100%; }
   .certificate-label { font-size: 1rem; }
   .certificate-highlight h2 { font-size: 1.9375rem; margin-top: 14px; }
   .certificate-heading-line { margin-top: 20px; }
+  /* 자격증 뒤 빛 번짐이 좌우로 6%씩 나가 휴대폰에서 화면이 옆으로 밀렸다 (2026-10-12) — 모바일은 안쪽으로 */
+  .certificate-documents::before { inset: 3% 0 0; }
   .certificate-document { border-radius: 4px; }
   .certificate-cover { box-shadow: 0 12px 22px #263e6026; }
   .certificate-front { box-shadow: 0 12px 22px #263e6026, 0 2px 5px #263e6012; }
@@ -437,7 +439,7 @@ img { display: block; max-width: 100%; }
   .mobile-cta.hidden { transform: translateY(110%); visibility: hidden; }
   .mobile-cta p { flex-shrink: 0; font-size: 0.875rem; color: var(--muted); line-height: 1.5; }
   .mobile-cta p b { display: block; font-size: 0.9375rem; color: #333d4b; font-weight: 600; }
-  .mobile-cta .button { flex: 1; min-height: 55px; border-radius: 9px; font-size: 1.0625rem; padding: 12px; }
+  .mobile-cta .button { flex: 1; min-width: 0; min-height: 55px; border-radius: 9px; font-size: 1.0625rem; padding: 12px; }
 }
 @media(max-width: 360px) {
   .wrap { width: calc(100% - 32px); }
