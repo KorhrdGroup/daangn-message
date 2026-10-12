@@ -32,7 +32,6 @@ export default function Page() {
             <a className="button" href="#estimate">내 비용·기간 알아보기</a>
           </div>
         </section>
-        <p className="hero-caption">당근 채팅으로 안내받은 분을 위한 비용·기간 확인 페이지</p>
         <section id="certificate" className="wrap certificate-highlight" aria-labelledby="certificate-title">
           <div className="certificate-panel">
             <div className="certificate-copy"><span className="certificate-label">사회복지사 2급</span><h2 id="certificate-title">보건복지부 발급<br /><em>국가자격증</em></h2><span className="certificate-heading-line" aria-hidden="true"></span></div>

@@ -7,7 +7,7 @@ export const metadata: Metadata = {
     '사회복지사 비용·기간, 내 조건으로 한 번에. 최종학력과 수강 경험에 맞는 예상 비용과 준비 기간을 문자로 안내받으세요.',
   robots: { index: false, follow: false },
   referrer: 'strict-origin-when-cross-origin',
-  icons: { icon: '/assets/han-lifetime-logo.png' },
+  // 탭 아이콘 = app/favicon.ico (오피스와 같은 아이콘, 2026-10-12)
 };
 
 export const viewport: Viewport = {
