@@ -40,7 +40,7 @@ const newRequestKey = () =>
     ? crypto.randomUUID()
     : Date.now().toString(36) + Math.random().toString(36).slice(2);
 
-export default function EstimateForm() {
+export default function EstimateForm({ code }: { code?: string } = {}) {
   const [step, setStep] = useState<1 | 2>(1);
   const [education, setEducation] = useState<Education | ''>('');
   const [experience, setExperience] = useState<Experience | ''>('');
@@ -151,6 +151,8 @@ export default function EstimateForm() {
       marketingConsent: false,
       privacyVersion: LEAD_FORM_CONFIG.privacyVersion,
       campaign: LEAD_FORM_CONFIG.campaign,
+      /** 코드 주소(/123)로 들어왔으면 그 코드 — 문의DB 유입경로 '당근_문자랜딩_{코드}' */
+      ...(code ? { landingCode: code } : {}),
     };
     submittingRef.current = true;
     setSubmitting(true);

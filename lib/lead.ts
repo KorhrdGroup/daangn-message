@@ -4,6 +4,7 @@
  *   당근 채팅으로 이 랜딩 링크를 보내고, "예상 비용·기간을 문자로 안내"하는 조건으로 연락처를 받는다.
  *   받은 정보는 한평생 오피스 문의DB(hakjeom_consultations)에
  *   대분류 '당근' · 중분류 '채팅문자' (click_source = '당근_채팅문자') 로 넣는다.
+ *   코드 주소(/123)로 들어오면 중분류 '문자랜딩_{코드}' (click_source = '당근_문자랜딩_123') — 2026-10-12 마케팅 요청.
  *   새 문의 알림(관리자 알림톡 · 오피스 알림)은 DB 트리거가 보낸다 — 여기서 따로 보내지 않는다.
  *
  * 문자는 보내지 않는다(2026-10-12 사용자 확정) — 담당자가 문의DB 를 보고 직접 연락해 안내한다.
@@ -33,6 +34,10 @@ export type ConsultationRow = {
 export type SmsStatus = 'sent' | 'queued' | 'failed' | 'not_requested';
 
 export const CLICK_SOURCE = '당근_채팅문자';
+/** 코드 주소 랜딩 — 글자·숫자·-·_ 만, 40자까지 (주소에 그대로 쓰는 코드) */
+const LANDING_CODE = /^[0-9A-Za-z가-힣_-]{1,40}$/;
+export const isLandingCode = (code: string) => LANDING_CODE.test(code);
+export const clickSourceFor = (code?: string) => (code ? `당근_문자랜딩_${code}` : CLICK_SOURCE);
 export const SMS_STATUS: SmsStatus = 'queued';
 /** 같은 번호로 이 시간 안에 다시 오면 새로 넣지 않는다 (두 번 누르기 · 새로고침 · 재시도) */
 const DUPLICATE_WINDOW_MS = 10 * 60 * 1000;
@@ -71,15 +76,17 @@ export function toConsultation(
   if (!isEducation(education) || !isExperience(experience)) return { error: '학력과 수강 경험을 선택해 주세요.' };
   if (b.privacyConsent !== true) return { error: '개인정보 수집·이용에 동의해 주세요.' };
   const version = String(b.privacyVersion ?? '').slice(0, 60);
+  const rawCode = String(b.landingCode ?? '').trim();
+  const code = rawCode && isLandingCode(rawCode) ? rawCode : '';
   return {
     row: {
       name,
       contact: formatPhone(digits),
       education: EDUCATION_DB[education],
       hope_course: '사회복지사',
-      reason: `[당근 채팅 랜딩] 예상 비용·준비 기간 안내 요청 · 수강 경험: ${EXPERIENCE_DB[experience]}${version ? ` · 동의 ${version}` : ''}`,
+      reason: `[당근 ${code ? `문자 랜딩 ${code}` : '채팅 랜딩'}] 예상 비용·준비 기간 안내 요청 · 수강 경험: ${EXPERIENCE_DB[experience]}${version ? ` · 동의 ${version}` : ''}`,
       memo: `사회복지 관련 과목: ${EXPERIENCE_LABEL[experience]}`,
-      click_source: CLICK_SOURCE,
+      click_source: clickSourceFor(code),
       status: '상담대기',
     },
   };
@@ -98,7 +105,7 @@ export async function saveLead(row: ConsultationRow): Promise<{ ok: true; duplic
   const q = new URLSearchParams({
     select: 'id',
     contact: `eq.${row.contact}`,
-    click_source: `eq.${CLICK_SOURCE}`,
+    click_source: `eq.${row.click_source}`,
     created_at: `gte.${since}`,
     limit: '1',
   });
