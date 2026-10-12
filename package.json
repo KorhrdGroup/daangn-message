@@ -2,6 +2,21 @@
   "name": "daangn-message",
   "private": true,
   "description": "한평생원격교육원 사회복지사 — 당근 채팅 전용 비용·기간 안내 랜딩 (오피스 문의DB 당근_채팅문자)",
-  "type": "module",
-  "engines": { "node": ">=20" }
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "next": "^16.2.6",
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "typescript": "^5"
+  }
 }
