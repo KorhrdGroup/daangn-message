@@ -6,7 +6,7 @@
  *   대분류 '당근' · 중분류 '채팅문자' (click_source = '당근_채팅문자') 로 넣는다.
  *   새 문의 알림(관리자 알림톡 · 오피스 알림)은 DB 트리거가 보낸다 — 여기서 따로 보내지 않는다.
  *
- * 문자 자동 발송은 아직 없다 — 담당자가 문의DB 를 보고 직접 안내한다.
+ * 문자는 보내지 않는다(2026-10-12 사용자 확정) — 담당자가 문의DB 를 보고 직접 연락해 안내한다.
  * 그래서 smsStatus 는 'queued'(접수됨 · 문자는 담당자가 보냄)로 답한다. 화면 문구는 components/EstimateForm 의 OUTCOME.queued.
  *
  * 환경변수 (.env.local / Vercel 설정 — 코드에 넣지 않는다)
@@ -77,7 +77,7 @@ export function toConsultation(
       contact: formatPhone(digits),
       education: EDUCATION_DB[education],
       hope_course: '사회복지사',
-      reason: `[당근 채팅 랜딩] 예상 비용·준비 기간 문자 안내 요청 · 수강 경험: ${EXPERIENCE_DB[experience]}${version ? ` · 동의 ${version}` : ''}`,
+      reason: `[당근 채팅 랜딩] 예상 비용·준비 기간 안내 요청 · 수강 경험: ${EXPERIENCE_DB[experience]}${version ? ` · 동의 ${version}` : ''}`,
       memo: `사회복지 관련 과목: ${EXPERIENCE_LABEL[experience]}`,
       click_source: CLICK_SOURCE,
       status: '상담대기',

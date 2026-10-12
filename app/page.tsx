@@ -28,7 +28,7 @@ export default function Page() {
           <div className="hero-content">
             <div className="pill"><span className="pill-mark" aria-hidden="true">🥕</span>당근 학습자 전용 안내</div>
             <h1 id="hero-title">사회복지사 비용·기간,<br /><em>내 조건으로 한 번에.</em></h1>
-            <p className="hero-copy"><span>얼마나 들고, 얼마나 걸릴지 궁금하셨죠?</span> <span>내 학력과 수강 경험에 맞는 예상 비용과</span> <span>준비 기간을 문자로 편하게 받아보세요.</span></p>
+            <p className="hero-copy"><span>얼마나 들고, 얼마나 걸릴지 궁금하셨죠?</span> <span>내 학력과 수강 경험에 맞는 예상 비용과</span> <span>준비 기간을 편하게 안내받아 보세요.</span></p>
             <a className="button" href="#estimate">내 비용·기간 알아보기</a>
           </div>
         </section>
@@ -145,9 +145,9 @@ export default function Page() {
             <details><summary>온라인 수업이 처음인데, 혼자 할 수 있을까요?</summary><p>혼자 알아보고 진행하실 필요 없어요. 1:1 담당자가 수강 방법과 학습 일정을 안내하고, 진행 중 궁금한 점도 확인해 드립니다. 처음 시작하는 분도 따라갈 수 있도록 단계별로 도와드려요.</p></details>
             <details><summary>비용·기간 안내를 받으면 수강 신청이 되나요?</summary><p>아니요. 예상 비용과 준비 기간을 안내받는 단계이며, 수강 신청이나 결제가 진행되지 않습니다. 내용을 확인한 후 준비 여부를 결정하시면 됩니다.</p></details>
             <details><summary>준비 기간은 무엇을 기준으로 안내하나요?</summary><p>최종학력과 이미 이수한 과목, 수강 시작 시점과 실습 일정 등을 확인해 예상 준비 기간을 안내해 드려요. 처음에는 선택한 조건을 기준으로 안내하고, 추가로 확인이 필요한 내용도 함께 알려드립니다.</p></details>
-            <details><summary>문자에 나온 비용과 기간은 확정인가요?</summary><p>선택하신 정보를 바탕으로 안내하는 예상 범위입니다. 실제 이수 내역과 과정, 수강·실습 일정 등을 확인하면서 달라질 수 있어요. 안내받은 기간은 준비 계획을 위한 참고이며, 자격증 발급 시점이 확정된 것은 아닙니다.</p></details>
+            <details><summary>안내받은 비용과 기간은 확정인가요?</summary><p>선택하신 정보를 바탕으로 안내하는 예상 범위입니다. 실제 이수 내역과 과정, 수강·실습 일정 등을 확인하면서 달라질 수 있어요. 안내받은 기간은 준비 계획을 위한 참고이며, 자격증 발급 시점이 확정된 것은 아닙니다.</p></details>
             <details><summary>자격증 취득 후 취업도 도와주시나요?</summary><p>네. 한평생원격교육원은 여성인력개발센터와 정식 협약을 맺고 취업 연계를 지원합니다. 취업 연계의 자세한 내용은 담당자에게 안내받으실 수 있어요.</p></details>
-            <details><summary>관련 과목을 들었는지 잘 모르겠어요.</summary><p>‘잘 모르겠어요’를 선택하시면 됩니다. 정확한 확인을 위해 이수 내역이 필요한 경우, 안내 문자에서 추가로 확인할 사항을 알려드려요.</p></details>
+            <details><summary>관련 과목을 들었는지 잘 모르겠어요.</summary><p>‘잘 모르겠어요’를 선택하시면 됩니다. 정확한 확인을 위해 이수 내역이 필요한 경우, 안내해 드릴 때 추가로 확인할 사항을 알려드려요.</p></details>
           </div>
         </div></section>
         <section id="reviews" className="reviews" aria-labelledby="reviews-title">
@@ -178,7 +178,7 @@ export default function Page() {
         </section>
         <section id="how" className="journey" aria-labelledby="how-title"><div className="wrap journey-grid">
           <div><span className="eyebrow">복잡한 상담 예약 없이</span><h2 id="how-title">확인은 간단하게.</h2></div>
-          <ol className="steps"><li><span className="step-number" aria-hidden="true">01</span><h3>내 준비 상황 선택</h3><p>학력과 관련 과목 수강 경험을 알려주세요.</p></li><li><span className="step-number" aria-hidden="true">02</span><h3>문자 받을 정보 입력</h3><p>성함과 휴대폰 번호를 남겨주세요.</p></li><li><span className="step-number" aria-hidden="true">03</span><h3>비용·기간 함께 확인</h3><p>예상 예산과 준비 기간을 확인하고, 시작 계획을 생각해 보세요.</p></li></ol>
+          <ol className="steps"><li><span className="step-number" aria-hidden="true">01</span><h3>내 준비 상황 선택</h3><p>학력과 관련 과목 수강 경험을 알려주세요.</p></li><li><span className="step-number" aria-hidden="true">02</span><h3>연락받을 정보 입력</h3><p>성함과 휴대폰 번호를 남겨주세요.</p></li><li><span className="step-number" aria-hidden="true">03</span><h3>비용·기간 함께 확인</h3><p>예상 예산과 준비 기간을 확인하고, 시작 계획을 생각해 보세요.</p></li></ol>
         </div></section>
         <section id="estimate" className="wrap section form-layout" aria-labelledby="estimate-title">
           <div className="form-aside"><span className="pill">나에게 맞는 비용·기간 안내</span><h2 id="estimate-title">내 경우엔 얼마,<br />얼마나 걸릴까요?</h2><p>지금까지의 준비 상황만 알려주세요.<br />선택한 조건에 맞는 예상 비용과<br />준비 기간을 함께 안내해 드릴게요.</p><div className="aside-note"><span className="tick" aria-hidden="true">✓</span><span>안내를 받아도 수강 신청이나 결제가 진행되지 않아요.</span></div></div>

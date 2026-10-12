@@ -14,9 +14,9 @@ import { PHONE_PATTERN, formatPhone } from '@/lib/phone';
 /** 서버가 알려 준 문자 상태별 완료 문구 — [작은 제목, 제목, 설명] */
 const OUTCOME: Record<SmsStatus, [string, string, string]> = {
   sent: ['문자 안내 발송 완료', '예상 비용·기간을 문자로 보내드렸어요.', '남겨주신 번호로 비용·기간 안내 문자를 발송했습니다. 수신 상태에 따라 도착까지 잠시 걸릴 수 있어요.'],
-  queued: ['안내 신청 완료', '예상 비용·기간 안내를 신청하셨어요.', '신청이 접수되었으며 문자는 발송 대기 중입니다. 안내를 받은 뒤 더 궁금한 점은 당근 채팅으로 남겨주세요.'],
+  queued: ['안내 신청 완료', '예상 비용·기간 안내를 신청하셨어요.', '담당자가 확인한 뒤 연락드려 안내해 드릴게요. 더 궁금한 점은 당근 채팅으로 남겨주세요.'],
   failed: ['신청 접수 완료', '신청은 접수됐지만, 문자 발송에 실패했어요.', '다시 신청하지 않으셔도 됩니다. 당근 채팅으로 문자 안내를 받지 못했다고 알려주세요.'],
-  not_requested: ['신청 접수 완료', '안내 요청이 접수됐어요.', '문자는 아직 발송되지 않았습니다. 정확한 안내가 필요하면 당근 채팅으로 문의해 주세요.'],
+  not_requested: ['신청 접수 완료', '안내 요청이 접수됐어요.', '담당자가 확인한 뒤 연락드려 안내해 드릴게요. 정확한 안내가 필요하면 당근 채팅으로 문의해 주세요.'],
 };
 const SMS_STATUSES = Object.keys(OUTCOME) as SmsStatus[];
 
@@ -29,7 +29,7 @@ type Analysis = { state: 'loading' | 'complete' | 'error'; title: string; copy: 
 const ANALYSIS_LOADING: Analysis = {
   state: 'loading',
   title: '나만의 사회복지사 비용 기간 분석중...',
-  copy: LIVE ? '입력하신 내용을 확인하고 있어요.' : '화면 미리보기입니다. 실제 분석이나 문자 발송은 진행되지 않아요.',
+  copy: LIVE ? '입력하신 내용을 확인하고 있어요.' : '화면 미리보기입니다. 실제 분석이나 접수는 진행되지 않아요.',
   closeLabel: '확인',
   showClose: false,
 };
@@ -127,7 +127,7 @@ export default function EstimateForm() {
       return;
     }
     if (!PHONE_PATTERN.test(digits)) {
-      setStepTwoError('문자를 받을 수 있는 휴대폰 번호를 확인해 주세요.');
+      setStepTwoError('연락받을 수 있는 휴대폰 번호를 확인해 주세요.');
       setPhoneInvalid(true);
       document.getElementById('customer-phone')?.focus();
       return;
@@ -160,7 +160,7 @@ export default function EstimateForm() {
     try {
       if (!LIVE) {
         await minimumDelay;
-        const previewCopy = '화면 체험이 완료됐어요. 입력한 이름·번호는 저장하거나 전송하지 않았으며, 실제 문자는 발송되지 않았습니다.';
+        const previewCopy = '화면 체험이 완료됐어요. 입력한 이름·번호는 저장하거나 전송하지 않았어요.';
         showOutcome({ label: '미리보기 완료', title: '완료!', copy: previewCopy, preview: true });
         finishAnalysis('완료!', previewCopy);
         return;
@@ -239,7 +239,7 @@ export default function EstimateForm() {
       <div className="form-shell" id="form-shell" ref={shellRef}>
         <div className="form-status" id="form-status" hidden={!!outcome}>
           <span className="step-label" id="step-label">
-            {step === 1 ? '1 / 2 · 내 준비 상황' : '2 / 2 · 문자 받을 정보'}
+            {step === 1 ? '1 / 2 · 내 준비 상황' : '2 / 2 · 연락받을 정보'}
           </span>
           <div className="step-track" aria-hidden="true">
             <span className="active"></span>
@@ -287,10 +287,10 @@ export default function EstimateForm() {
             </p>
             <div className="form-actions">
               <button type="button" className="button" id="next-step" disabled={submitting} onClick={advance}>
-                다음 · 문자받을 정보 입력
+                다음
               </button>
             </div>
-            <p className="form-hint">내게 맞는 비용과 기간을 문자로 알려드려요.</p>
+            <p className="form-hint">내게 맞는 비용과 기간을 안내해 드려요.</p>
           </section>
           <section id="step-two" aria-labelledby="step-two-title" hidden={step !== 2}>
             <h3 id="step-two-title" tabIndex={-1}>비용과 기간을 함께 받아보세요.</h3>
@@ -369,7 +369,7 @@ export default function EstimateForm() {
               </button>
             </div>
             <p className="form-hint" id="submit-hint">
-              {LIVE ? '번호를 정확하게 입력해 주세요. 선택한 조건을 바탕으로 안내해 드려요.' : '입력 화면을 체험하실 수 있어요. 실제 문자는 발송되지 않아요.'}
+              {LIVE ? '번호를 정확하게 입력해 주세요. 선택한 조건을 바탕으로 안내해 드려요.' : '입력 화면을 체험하실 수 있어요. 실제 접수는 되지 않아요.'}
             </p>
           </section>
         </form>
