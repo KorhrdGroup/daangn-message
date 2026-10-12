@@ -24,6 +24,8 @@ export type ConsultationRow = {
   education: string;
   hope_course: string;
   reason: string;
+  /** 오피스 문의DB 목록의 '메모' 칸 — 사회복지 관련 과목 수강 경험을 화면에서 고른 문구 그대로 (2026-10-12) */
+  memo: string;
   click_source: string;
   status: string;
 };
@@ -49,6 +51,9 @@ const EXPERIENCE_DB: Record<Experience, string> = {
   unsure: '잘 모름',
 };
 
+/** 메모에 넣는 문구 — 화면에서 고른 그대로 (처음 시작해요 / 일부 과목을 들었어요 / 잘 모르겠어요) */
+const EXPERIENCE_LABEL = Object.fromEntries(EXPERIENCE_OPTIONS.map((o) => [o.value, o.label])) as Record<Experience, string>;
+
 const isEducation = (v: string): v is Education => EDUCATION_OPTIONS.some((o) => o.value === v);
 const isExperience = (v: string): v is Experience => EXPERIENCE_OPTIONS.some((o) => o.value === v);
 
@@ -73,6 +78,7 @@ export function toConsultation(
       education: EDUCATION_DB[education],
       hope_course: '사회복지사',
       reason: `[당근 채팅 랜딩] 예상 비용·준비 기간 문자 안내 요청 · 수강 경험: ${EXPERIENCE_DB[experience]}${version ? ` · 동의 ${version}` : ''}`,
+      memo: `사회복지 관련 과목: ${EXPERIENCE_LABEL[experience]}`,
       click_source: CLICK_SOURCE,
       status: '상담대기',
     },
