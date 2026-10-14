@@ -36,9 +36,33 @@ export const viewport: Viewport = {
   themeColor: '#ffffff',
 };
 
+// 당근 비즈니스 전환 추적 코드 '문자랜딩' (2026-10-14) — 당근 안내대로 </head> 바로 위에 둔다
+const KARROT_PIXEL_ID = '1791947966869242001';
+const KARROT_PIXEL = `
+  (function (w, d) {
+    if (w.karrotPixel) return;
+    var k = { stub: true, queue: [] };
+    k.init = function () { k.queue.push(['init', arguments, Date.now()]); };
+    k.track = function () { k.queue.push(['track', arguments, Date.now()]); };
+    w.karrotPixel = k;
+    var s = d.createElement('script');
+    s.async = true;
+    s.src = 'https://karrot-pixel.business.daangn.com/karrot-pixel.js';
+    var f = d.getElementsByTagName('script')[0];
+    f && f.parentNode ? f.parentNode.insertBefore(s, f) : d.head.appendChild(s);
+  })(window, document);
+  window.karrotPixel.init('${KARROT_PIXEL_ID}');
+  window.karrotPixel.track('ViewPage');
+`;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
+      <head>
+        {/* Danggeun Market Code */}
+        <script dangerouslySetInnerHTML={{ __html: KARROT_PIXEL }} />
+        {/* End Danggeun Market Code */}
+      </head>
       <body>{children}</body>
     </html>
   );
