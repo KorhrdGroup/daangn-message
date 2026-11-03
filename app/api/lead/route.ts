@@ -14,7 +14,7 @@ export async function POST(request: Request) {
       console.error('[lead]', result.error);
       return NextResponse.json({ accepted: false, error: '접수에 실패했습니다.' }, { status: 500 });
     }
-    // 신청자 알림톡 — 고른 값에 맞는 템플릿이 있을 때만, 10분 안 같은 번호 재신청(duplicate)에는 다시 보내지 않는다.
+    // 신청자 알림톡 — 고른 값에 맞는 템플릿으로 (lib/alimtalk pickTemplate), 10분 안 같은 번호 재신청(duplicate)에는 다시 보내지 않는다.
     // 응답을 먼저 보내고 뒤에서 보낸다 (알리고가 느려도 화면이 기다리지 않게)
     const tpl = result.duplicate ? null : pickTemplate(parsed.choice.education, parsed.choice.experience);
     if (tpl) {
