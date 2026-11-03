@@ -7,8 +7,8 @@
  *   코드 주소(/123)로 들어오면 중분류 '문자랜딩_{코드}' (click_source = '당근_문자랜딩_123') — 2026-10-12 마케팅 요청.
  *   새 문의 알림(관리자 알림톡 · 오피스 알림)은 DB 트리거가 보낸다 — 여기서 따로 보내지 않는다.
  *
- * 문자는 보내지 않는다(2026-10-12 사용자 확정) — 담당자가 문의DB 를 보고 직접 연락해 안내한다.
- * 그래서 smsStatus 는 'queued'(접수됨 · 문자는 담당자가 보냄)로 답한다. 화면 문구는 components/EstimateForm 의 OUTCOME.queued.
+ * 신청자 알림톡은 고른 값에 맞는 템플릿이 있으면 보낸다(2026-11-03, lib/alimtalk.ts) — 없으면 담당자가 문의DB 를 보고 직접 연락.
+ * 알림톡은 응답 뒤에 보내므로 smsStatus 는 늘 'queued'(접수됨) 로 답한다. 화면 문구는 components/EstimateForm 의 OUTCOME.queued.
  *
  * 환경변수 (.env.local / Vercel 설정 — 코드에 넣지 않는다)
  *   SUPABASE_URL                오피스 Supabase 주소
@@ -65,7 +65,7 @@ const isExperience = (v: string): v is Experience => EXPERIENCE_OPTIONS.some((o)
 /** 입력 검사 — 화면과 같은 규칙을 서버에서 한 번 더. 문제가 있으면 문구, 없으면 저장할 행 */
 export function toConsultation(
   body: unknown,
-): { row: ConsultationRow; error?: undefined } | { row?: undefined; error: string } {
+): { row: ConsultationRow; choice: { education: Education; experience: Experience }; error?: undefined } | { row?: undefined; error: string } {
   const b = (body && typeof body === 'object' ? body : {}) as Record<string, unknown>;
   const name = String(b.name ?? '').trim();
   const digits = String(b.phone ?? '').replace(/\D/g, '');
@@ -79,6 +79,7 @@ export function toConsultation(
   const rawCode = String(b.landingCode ?? '').trim();
   const code = rawCode && isLandingCode(rawCode) ? rawCode : '';
   return {
+    choice: { education, experience },
     row: {
       name,
       contact: formatPhone(digits),
