@@ -335,13 +335,16 @@ export default function EstimateForm({ code }: { code?: string } = {}) {
                 autoComplete="tel"
                 maxLength={13}
                 placeholder="010-0000-0000"
-                aria-describedby="step-two-error"
+                aria-describedby="phone-note step-two-error"
                 aria-invalid={phoneInvalid || undefined}
                 value={phone}
                 disabled={submitting}
                 onChange={(e) => onPhoneChange(e.target.value)}
               />
             </label>
+            <p className="phone-note" id="phone-note">
+              ※ 입력하신 휴대폰 번호로 안내 문자가 발송됩니다. 반드시 실제 사용 중인 번호를 입력해 주세요.
+            </p>
             <div className="honeypot" aria-hidden="true">
               <label htmlFor="company-site">
                 회사 홈페이지

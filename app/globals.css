@@ -198,6 +198,7 @@ img { display: block; max-width: 100%; }
 .text-input { display: block; width: 100%; min-height: 58px; padding: 15px 17px; margin-top: 9px; background: white; border: 1.5px solid #e5e8eb; border-radius: 14px; color: var(--ink); font-size: 1.125rem; font-weight: 400; }
 .text-input::placeholder { color: #8b95a1; }
 .text-input[aria-invalid=true] { border-color: #f04452; }
+.phone-note { margin-top: 9px; color: #8b95a1; font-size: 0.875rem; line-height: 1.5; }
 .selection-summary { display: flex; gap: 8px; flex-wrap: wrap; margin: 23px 0; }
 .selection-summary span { padding: 6px 10px; border-radius: 7px; background: #eaf0f6; color: #4e5968; font-size: 0.9375rem; }
 .preview-notice { padding: 15px; border-radius: 14px; background: #fff0e6; color: #915331; font-size: 0.9375rem; margin-top: 22px; }
