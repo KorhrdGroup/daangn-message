@@ -81,6 +81,7 @@ export function toConsultation(
   // 오피스 「업셀링 캠페인」 문자 링크로 들어온 문의 — 대분류 '업셀링' · 중분류 캠페인 코드(UP-012) (2026-11-12)
   const rawUpsell = String(b.upsellCampaign ?? '').trim();
   const upsell = /^UP-\d{3,}$/.test(rawUpsell) ? rawUpsell : '';
+  const upsellTeam = ['1팀', '2팀', '교육지원팀'].includes(String(b.upsellTeam ?? '')) ? String(b.upsellTeam) : '';
   return {
     choice: { education, experience },
     row: {
@@ -90,7 +91,7 @@ export function toConsultation(
       hope_course: '사회복지사',
       reason: `[${upsell ? `업셀링 ${upsell}` : `당근 ${code ? `문자 랜딩 ${code}` : '채팅 랜딩'}`}] 예상 비용·준비 기간 안내 요청 · 수강 경험: ${EXPERIENCE_DB[experience]}${version ? ` · 동의 ${version}` : ''}`,
       memo: `사회복지 관련 과목: ${EXPERIENCE_LABEL[experience]}`,
-      click_source: upsell ? `업셀링_${upsell}` : clickSourceFor(code),
+      click_source: upsell ? `업셀링_${upsell}${upsellTeam ? `_${upsellTeam}` : ''}` : clickSourceFor(code),
       status: '상담대기',
     },
   };

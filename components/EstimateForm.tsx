@@ -41,11 +41,14 @@ const newRequestKey = () =>
     : Date.now().toString(36) + Math.random().toString(36).slice(2);
 
 /** 주소의 업셀링 캠페인 코드 — utm_source=upsell 일 때만 */
-function upsellFromUrl(): { upsellCampaign?: string } {
+function upsellFromUrl(): { upsellCampaign?: string; upsellTeam?: string } {
   if (typeof window === 'undefined') return {};
   const sp = new URLSearchParams(window.location.search);
   const id = sp.get('campaign_id') ?? '';
-  return sp.get('utm_source') === 'upsell' && /^UP-\d{3,}$/.test(id) ? { upsellCampaign: id } : {};
+  if (sp.get('utm_source') !== 'upsell' || !/^UP-\d{3,}$/.test(id)) return {};
+  // 팀별 상담 링크(&t=1 · 2 · e) → 문의DB 중분류 앞에 팀 (2026-11-12)
+  const team = ({ '1': '1팀', '2': '2팀', e: '교육지원팀' } as Record<string, string>)[sp.get('t') ?? ''];
+  return team ? { upsellCampaign: id, upsellTeam: team } : { upsellCampaign: id };
 }
 
 export default function EstimateForm({ code }: { code?: string } = {}) {
