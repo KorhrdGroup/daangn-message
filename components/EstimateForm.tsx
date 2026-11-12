@@ -40,6 +40,14 @@ const newRequestKey = () =>
     ? crypto.randomUUID()
     : Date.now().toString(36) + Math.random().toString(36).slice(2);
 
+/** 주소의 업셀링 캠페인 코드 — utm_source=upsell 일 때만 */
+function upsellFromUrl(): { upsellCampaign?: string } {
+  if (typeof window === 'undefined') return {};
+  const sp = new URLSearchParams(window.location.search);
+  const id = sp.get('campaign_id') ?? '';
+  return sp.get('utm_source') === 'upsell' && /^UP-\d{3,}$/.test(id) ? { upsellCampaign: id } : {};
+}
+
 export default function EstimateForm({ code }: { code?: string } = {}) {
   const [step, setStep] = useState<1 | 2>(1);
   const [education, setEducation] = useState<Education | ''>('');
@@ -153,6 +161,8 @@ export default function EstimateForm({ code }: { code?: string } = {}) {
       campaign: LEAD_FORM_CONFIG.campaign,
       /** 코드 주소(/123)로 들어왔으면 그 코드 — 문의DB 유입경로 '당근_문자랜딩_{코드}' */
       ...(code ? { landingCode: code } : {}),
+      /** 오피스 「업셀링 캠페인」 문자 링크(?utm_source=upsell&campaign_id=UP-012) — 문의DB 유입경로 '업셀링_{캠페인 코드}' (2026-11-12) */
+      ...upsellFromUrl(),
     };
     submittingRef.current = true;
     setSubmitting(true);
