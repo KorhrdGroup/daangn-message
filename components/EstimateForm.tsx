@@ -60,6 +60,12 @@ export default function EstimateForm({ code }: { code?: string } = {}) {
   const [consent, setConsent] = useState(false);
   /** [선택] 광고성 정보 수신 동의 — 기본은 체크 안 됨, 체크 안 해도 신청 가능 (정보통신망법 제50조) */
   const [marketingAgreed, setMarketingAgreed] = useState(false);
+  /** 「모두 동의」 — 필수(개인정보) + 선택(광고성 정보 수신)을 한 번에 켜고 끔. 신청 검사는 필수(consent)만 본다 */
+  const allConsentsAgreed = consent && marketingAgreed;
+  const handleAllConsents = (checked: boolean) => {
+    setConsent(checked);
+    setMarketingAgreed(checked);
+  };
   const [nameInvalid, setNameInvalid] = useState(false);
   const [phoneInvalid, setPhoneInvalid] = useState(false);
   const [stepOneError, setStepOneError] = useState('');
@@ -372,6 +378,12 @@ export default function EstimateForm({ code }: { code?: string } = {}) {
             </div>
             <div className="consents">
               <label className="consent">
+                <input type="checkbox" checked={allConsentsAgreed} disabled={submitting} onChange={(e) => handleAllConsents(e.target.checked)} />
+                <span>
+                  <b>모두 동의합니다</b> (선택 항목 포함)
+                </span>
+              </label>
+              <label className="consent">
                 <input type="checkbox" id="privacy-consent" name="privacyConsent" checked={consent} disabled={submitting} onChange={(e) => setConsent(e.target.checked)} />
                 <span>
                   <b>[필수]</b> 예상 비용·준비 기간 안내 및 이번 문의에 대한 후속 상담을 위한 개인정보 수집·이용 및 안내받은 후 담당자가 개별로 간단 상담 진행에 동의합니다.
@@ -432,7 +444,11 @@ export default function EstimateForm({ code }: { code?: string } = {}) {
           <dt>수집·이용 주체</dt>
           <dd id="privacy-operator">{LIVE ? LEAD_FORM_CONFIG.operatorName : '실제 수집 주체 확인 후 기재'}</dd>
           <dt>수집 항목</dt>
-          <dd>성함, 휴대폰 번호, 최종학력, 관련 과목 수강 경험</dd>
+          <dd>
+            성함, 휴대폰 번호, 최종학력, 관련 과목 수강 경험
+            <br />
+            선택 - 광고성 정보 수신 동의 여부
+          </dd>
           <dt>이용 목적</dt>
           <dd>
             선택한 조건에 따른 예상 비용·준비 기간 산정 및 안내, 신청하신 사회복지사 과정 문의에 대한 전화·문자 답변과 후속 상담. 이 동의는 별도의 홍보·광고 수신 동의로 사용하지 않습니다.
