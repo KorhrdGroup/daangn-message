@@ -469,15 +469,18 @@ export default function EstimateForm({ code }: { code?: string } = {}) {
 
       <dialog className="privacy-dialog" id="marketing-dialog" aria-labelledby="marketing-title" ref={marketingRef} onClick={onPrivacyClick}>
         <h2 id="marketing-title">[선택] 광고성 정보 수신 동의</h2>
+        <p>(주)한평생그룹은 이벤트 안내를 위해 휴대폰 번호로 광고성 정보를 발송해요. 발송 채널은 SMS, 알림톡이며, 보유 기간은 동의 철회 시까지예요.</p>
         <dl>
-          <dt>목적</dt>
-          <dd>교육 과정 · 자격증 · 할인 · 이벤트 등 혜택 안내</dd>
-          <dt>방법</dt>
-          <dd>문자(SMS · LMS · MMS), 카카오톡, 전화</dd>
-          <dt>보유 · 이용 기간</dt>
-          <dd>동의 철회 시 또는 수집일로부터 5년</dd>
-          <dt>거부 권리</dt>
-          <dd>동의하지 않아도 상담 신청은 할 수 있으며, 동의 후에도 언제든 무료수신거부로 철회할 수 있습니다.</dd>
+          <dt>수집 및 이용 목적</dt>
+          <dd>이벤트 안내(광고성 정보 발송)</dd>
+          <dt>수집 항목</dt>
+          <dd>휴대폰 번호</dd>
+          <dt>발송 채널</dt>
+          <dd>SMS, 알림톡</dd>
+          <dt>보유 기간</dt>
+          <dd>동의 철회 시까지</dd>
+          <dt>거부 권리 및 거부 시 불이익</dt>
+          <dd>동의를 거부할 수 있어요. 거부해도 상담 신청에는 불이익이 없고, 동의한 뒤에도 언제든 무료수신거부로 철회할 수 있어요.</dd>
         </dl>
         <form method="dialog">
           <button className="button full">확인했어요</button>
