@@ -29,6 +29,9 @@ export type ConsultationRow = {
   memo: string;
   click_source: string;
   status: string;
+  /** [선택] 광고성 정보 수신 동의 (정보통신망법 제50조) — 체크했을 때만 참, 동의 시각을 같이 남긴다 */
+  marketing_agreed: boolean;
+  marketing_agreed_at: string | null;
 };
 
 export type SmsStatus = 'sent' | 'queued' | 'failed' | 'not_requested';
@@ -82,6 +85,7 @@ export function toConsultation(
   const rawUpsell = String(b.upsellCampaign ?? '').trim();
   const upsell = /^UP-\d{3,}$/.test(rawUpsell) ? rawUpsell : '';
   const upsellTeam = ['1팀', '2팀', '교육지원팀'].includes(String(b.upsellTeam ?? '')) ? String(b.upsellTeam) : '';
+  const marketingAgreed = b.marketingAgreed === true;
   return {
     choice: { education, experience },
     row: {
@@ -93,6 +97,8 @@ export function toConsultation(
       memo: `사회복지 관련 과목: ${EXPERIENCE_LABEL[experience]}`,
       click_source: upsell ? `업셀링_${upsell}${upsellTeam ? `_${upsellTeam}` : ''}` : clickSourceFor(code),
       status: '상담대기',
+      marketing_agreed: marketingAgreed,
+      marketing_agreed_at: marketingAgreed ? new Date().toISOString() : null,
     },
   };
 }

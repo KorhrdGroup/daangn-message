@@ -58,6 +58,8 @@ export default function EstimateForm({ code }: { code?: string } = {}) {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [consent, setConsent] = useState(false);
+  /** [선택] 광고성 정보 수신 동의 — 기본은 체크 안 됨, 체크 안 해도 신청 가능 (정보통신망법 제50조) */
+  const [marketingAgreed, setMarketingAgreed] = useState(false);
   const [nameInvalid, setNameInvalid] = useState(false);
   const [phoneInvalid, setPhoneInvalid] = useState(false);
   const [stepOneError, setStepOneError] = useState('');
@@ -73,6 +75,7 @@ export default function EstimateForm({ code }: { code?: string } = {}) {
   const honeypotRef = useRef<HTMLInputElement>(null);
   const submitRef = useRef<HTMLButtonElement>(null);
   const privacyRef = useRef<HTMLDialogElement>(null);
+  const marketingRef = useRef<HTMLDialogElement>(null);
   const analysisRef = useRef<HTMLDialogElement>(null);
   const analysisCloseRef = useRef<HTMLButtonElement>(null);
   const requestKey = useRef<string | null>(null);
@@ -120,6 +123,7 @@ export default function EstimateForm({ code }: { code?: string } = {}) {
     setName('');
     setPhone('');
     setConsent(false);
+    setMarketingAgreed(false);
   };
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -159,7 +163,7 @@ export default function EstimateForm({ code }: { code?: string } = {}) {
       requestedInformation: ['estimated_cost', 'estimated_duration'],
       privacyConsent: true,
       inquiryFollowUpRequested: true,
-      marketingConsent: false,
+      marketingAgreed,
       privacyVersion: LEAD_FORM_CONFIG.privacyVersion,
       campaign: LEAD_FORM_CONFIG.campaign,
       /** 코드 주소(/123)로 들어왔으면 그 코드 — 문의DB 유입경로 '당근_문자랜딩_{코드}' */
@@ -221,9 +225,10 @@ export default function EstimateForm({ code }: { code?: string } = {}) {
     setPhoneInvalid(false);
   };
 
+  /** 팝업 바깥(배경)을 누르면 닫는다 — 개인정보 · 광고성 정보 팝업 공용 */
   const onPrivacyClick = (event: MouseEvent<HTMLDialogElement>) => {
-    const dialog = privacyRef.current;
-    if (!dialog || event.target !== dialog) return;
+    const dialog = event.currentTarget;
+    if (event.target !== dialog) return;
     const rect = dialog.getBoundingClientRect();
     if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close();
   };
@@ -241,6 +246,7 @@ export default function EstimateForm({ code }: { code?: string } = {}) {
     setName('');
     setPhone('');
     setConsent(false);
+    setMarketingAgreed(false);
     setOutcome(null);
     setStepOneError('');
     setStepTwoError('');
@@ -374,6 +380,15 @@ export default function EstimateForm({ code }: { code?: string } = {}) {
               <button type="button" className="privacy-link" id="privacy-open" disabled={submitting} onClick={() => privacyRef.current?.showModal()}>
                 개인정보 수집·이용 내용 보기
               </button>
+              <label className="consent">
+                <input type="checkbox" id="marketing-consent" name="marketingAgreed" checked={marketingAgreed} disabled={submitting} onChange={(e) => setMarketingAgreed(e.target.checked)} />
+                <span>
+                  <b>[선택]</b> 광고성 정보 수신에 동의합니다.
+                </span>
+              </label>
+              <button type="button" className="privacy-link" id="marketing-open" disabled={submitting} onClick={() => marketingRef.current?.showModal()}>
+                광고성 정보 수신 내용 보기
+              </button>
             </div>
             <p className="error" id="step-two-error" role="alert" hidden={!stepTwoError}>
               {stepTwoError}
@@ -430,6 +445,23 @@ export default function EstimateForm({ code }: { code?: string } = {}) {
           <dd>
             동의를 거부할 수 있습니다. 거부 시 이 신청서를 통한 비용·기간 및 상담 안내가 제한됩니다. 이미 신청한 상담의 추가 연락 중단은 연락한 담당자에게 요청하실 수 있습니다.
           </dd>
+        </dl>
+        <form method="dialog">
+          <button className="button full">확인했어요</button>
+        </form>
+      </dialog>
+
+      <dialog className="privacy-dialog" id="marketing-dialog" aria-labelledby="marketing-title" ref={marketingRef} onClick={onPrivacyClick}>
+        <h2 id="marketing-title">[선택] 광고성 정보 수신 동의</h2>
+        <dl>
+          <dt>목적</dt>
+          <dd>교육 과정 · 자격증 · 할인 · 이벤트 등 혜택 안내</dd>
+          <dt>방법</dt>
+          <dd>문자(SMS · LMS · MMS), 카카오톡, 전화</dd>
+          <dt>보유 · 이용 기간</dt>
+          <dd>동의 철회 시 또는 수집일로부터 5년</dd>
+          <dt>거부 권리</dt>
+          <dd>동의하지 않아도 상담 신청은 할 수 있으며, 동의 후에도 언제든 무료수신거부로 철회할 수 있습니다.</dd>
         </dl>
         <form method="dialog">
           <button className="button full">확인했어요</button>
