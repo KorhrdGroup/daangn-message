@@ -121,7 +121,19 @@ export async function saveLead(row: ConsultationRow): Promise<{ ok: true; duplic
     limit: '1',
   });
   const dup = await fetch(`${rest}?${q}`, { headers, cache: 'no-store' });
-  if (dup.ok && ((await dup.json()) as unknown[]).length > 0) return { ok: true, duplicate: true };
+  const dupRows = dup.ok ? ((await dup.json()) as { id: number }[]) : [];
+  if (dupRows.length > 0) {
+    // 10분 안 같은 번호 · 같은 유입경로 재신청은 새 줄을 넣지 않는다 — 이번에 광고성 정보 수신에 동의했으면 기존 줄에 동의를 남긴다(동의가 빠지지 않게, 2026-11-13)
+    if (row.marketing_agreed) {
+      await fetch(`${rest}?id=eq.${dupRows[0].id}&marketing_agreed=eq.false`, {
+        method: 'PATCH',
+        headers: { ...headers, Prefer: 'return=minimal' },
+        body: JSON.stringify({ marketing_agreed: true, marketing_agreed_at: row.marketing_agreed_at }),
+        cache: 'no-store',
+      }).catch(() => undefined);
+    }
+    return { ok: true, duplicate: true };
+  }
 
   const saved = await fetch(rest, {
     method: 'POST',
