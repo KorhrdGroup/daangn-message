@@ -46,8 +46,8 @@ function upsellFromUrl(): { upsellCampaign?: string; upsellTeam?: string } {
   const sp = new URLSearchParams(window.location.search);
   const id = sp.get('campaign_id') ?? '';
   if (sp.get('utm_source') !== 'upsell' || !/^UP-\d{3,}$/.test(id)) return {};
-  // 팀별 상담 링크(&t=1 · 2 · e) → 문의DB 중분류 앞에 팀 (2026-11-12)
-  const team = ({ '1': '1팀', '2': '2팀', e: '교육지원팀' } as Record<string, string>)[sp.get('t') ?? ''];
+  // 팀별 상담 링크(&t=1 · 2 · e · m) → 문의DB 중분류 앞에 팀 (2026-11-12, 마케팅팀 11-19 — 오피스 DB 가 「공용」으로 바꾼다)
+  const team = ({ '1': '1팀', '2': '2팀', e: '교육지원팀', m: '마케팅팀' } as Record<string, string>)[sp.get('t') ?? ''];
   return team ? { upsellCampaign: id, upsellTeam: team } : { upsellCampaign: id };
 }
 

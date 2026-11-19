@@ -84,7 +84,7 @@ export function toConsultation(
   // 오피스 「업셀링 캠페인」 문자 링크로 들어온 문의 — 대분류 '업셀링' · 중분류 캠페인 코드(UP-012) (2026-11-12)
   const rawUpsell = String(b.upsellCampaign ?? '').trim();
   const upsell = /^UP-\d{3,}$/.test(rawUpsell) ? rawUpsell : '';
-  const upsellTeam = ['1팀', '2팀', '교육지원팀'].includes(String(b.upsellTeam ?? '')) ? String(b.upsellTeam) : '';
+  const upsellTeam = ['1팀', '2팀', '교육지원팀', '마케팅팀'].includes(String(b.upsellTeam ?? '')) ? String(b.upsellTeam) : '';
   const marketingAgreed = b.marketingAgreed === true;
   return {
     choice: { education, experience },
