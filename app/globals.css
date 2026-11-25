@@ -265,6 +265,9 @@ img { display: block; max-width: 100%; }
 .privacy-dialog dl { margin: 0; font-size: 1rem; }
 .privacy-dialog dt { font-weight: 650; margin-top: 21px; }
 .privacy-dialog dd { margin: 7px 0 0; color: var(--muted); }
+.privacy-dialog .privacy-text { margin-top: 28px; padding-top: 21px; border-top: 1px solid var(--line); font-size: 1rem; color: var(--muted); }
+.privacy-dialog .privacy-text h3 { font-size: 1rem; font-weight: 650; letter-spacing: normal; line-height: inherit; color: var(--ink); margin-bottom: 7px; }
+.privacy-dialog .privacy-text p + p { margin-top: 14px; }
 .privacy-dialog .button { margin-top: 25px; }
 .privacy-dialog .preview-notice { margin-top: 0; }
 .analysis-dialog { width: calc(100% - 40px); max-width: 440px; max-height: 85dvh; overflow: auto; padding: 36px 28px 28px; border: 0; border-radius: 26px; background: #fff; color: var(--ink); text-align: center; box-shadow: 0 24px 80px #191f2829; }

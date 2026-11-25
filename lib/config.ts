@@ -8,7 +8,7 @@ export const LEAD_FORM_CONFIG = {
   /** 개인정보 안내 팝업 · 아래 '운영' 줄 — barosocial 개인정보처리방침과 같은 주체 */
   operatorName: '한평생교육',
   retentionPeriod: '상담 목적 달성 시까지 (파기 요청 시 지체 없이 파기)',
-  privacyVersion: '2026-10-07-consultation-v4',
+  privacyVersion: '2026-11-25-consultation-v5',
   campaign: 'karrot-chat-social-worker',
 };
 

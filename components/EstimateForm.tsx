@@ -58,14 +58,8 @@ export default function EstimateForm({ code }: { code?: string } = {}) {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [consent, setConsent] = useState(false);
-  /** [선택] 광고성 정보 수신 동의 — 기본은 체크 안 됨, 체크 안 해도 신청 가능 (정보통신망법 제50조) */
-  const [marketingAgreed, setMarketingAgreed] = useState(false);
-  /** 「모두 동의」 — 필수(개인정보) + 선택(광고성 정보 수신)을 한 번에 켜고 끔. 신청 검사는 필수(consent)만 본다 */
-  const allConsentsAgreed = consent && marketingAgreed;
-  const handleAllConsents = (checked: boolean) => {
-    setConsent(checked);
-    setMarketingAgreed(checked);
-  };
+  /** 2026-11-25 동의를 개인정보 동의 하나로 통합(그 안에 「개인정보 수집 · 이용 동의」 — 홍보 · 광고성 정보 제공 목적 포함) — 신청하면 광고 수신 동의도 기록 */
+  const marketingAgreed = consent;
   const [nameInvalid, setNameInvalid] = useState(false);
   const [phoneInvalid, setPhoneInvalid] = useState(false);
   const [stepOneError, setStepOneError] = useState('');
@@ -81,7 +75,6 @@ export default function EstimateForm({ code }: { code?: string } = {}) {
   const honeypotRef = useRef<HTMLInputElement>(null);
   const submitRef = useRef<HTMLButtonElement>(null);
   const privacyRef = useRef<HTMLDialogElement>(null);
-  const marketingRef = useRef<HTMLDialogElement>(null);
   const analysisRef = useRef<HTMLDialogElement>(null);
   const analysisCloseRef = useRef<HTMLButtonElement>(null);
   const requestKey = useRef<string | null>(null);
@@ -129,7 +122,6 @@ export default function EstimateForm({ code }: { code?: string } = {}) {
     setName('');
     setPhone('');
     setConsent(false);
-    setMarketingAgreed(false);
   };
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -231,7 +223,7 @@ export default function EstimateForm({ code }: { code?: string } = {}) {
     setPhoneInvalid(false);
   };
 
-  /** 팝업 바깥(배경)을 누르면 닫는다 — 개인정보 · 광고성 정보 팝업 공용 */
+  /** 팝업 바깥(배경)을 누르면 닫는다 — 개인정보 팝업 */
   const onPrivacyClick = (event: MouseEvent<HTMLDialogElement>) => {
     const dialog = event.currentTarget;
     if (event.target !== dialog) return;
@@ -252,7 +244,6 @@ export default function EstimateForm({ code }: { code?: string } = {}) {
     setName('');
     setPhone('');
     setConsent(false);
-    setMarketingAgreed(false);
     setOutcome(null);
     setStepOneError('');
     setStepTwoError('');
@@ -378,12 +369,6 @@ export default function EstimateForm({ code }: { code?: string } = {}) {
             </div>
             <div className="consents">
               <label className="consent">
-                <input type="checkbox" checked={allConsentsAgreed} disabled={submitting} onChange={(e) => handleAllConsents(e.target.checked)} />
-                <span>
-                  <b>모두 동의합니다</b> (선택 항목 포함)
-                </span>
-              </label>
-              <label className="consent">
                 <input type="checkbox" id="privacy-consent" name="privacyConsent" checked={consent} disabled={submitting} onChange={(e) => setConsent(e.target.checked)} />
                 <span>
                   <b>[필수]</b> 예상 비용·준비 기간 안내 및 이번 문의에 대한 후속 상담을 위한 개인정보 수집·이용 및 안내받은 후 담당자가 개별로 간단 상담 진행에 동의합니다.
@@ -391,15 +376,6 @@ export default function EstimateForm({ code }: { code?: string } = {}) {
               </label>
               <button type="button" className="privacy-link" id="privacy-open" disabled={submitting} onClick={() => privacyRef.current?.showModal()}>
                 개인정보 수집·이용 내용 보기
-              </button>
-              <label className="consent">
-                <input type="checkbox" id="marketing-consent" name="marketingAgreed" checked={marketingAgreed} disabled={submitting} onChange={(e) => setMarketingAgreed(e.target.checked)} />
-                <span>
-                  <b>[선택]</b> 광고성 정보 수신에 동의합니다.
-                </span>
-              </label>
-              <button type="button" className="privacy-link" id="marketing-open" disabled={submitting} onClick={() => marketingRef.current?.showModal()}>
-                광고성 정보 수신 내용 보기
               </button>
             </div>
             <p className="error" id="step-two-error" role="alert" hidden={!stepTwoError}>
@@ -446,42 +422,34 @@ export default function EstimateForm({ code }: { code?: string } = {}) {
           <dt>수집 항목</dt>
           <dd>
             성함, 휴대폰 번호, 최종학력, 관련 과목 수강 경험
-            <br />
-            선택 - 광고성 정보 수신 동의 여부
           </dd>
           <dt>이용 목적</dt>
           <dd>
-            선택한 조건에 따른 예상 비용·준비 기간 산정 및 안내, 신청하신 사회복지사 과정 문의에 대한 전화·문자 답변과 후속 상담. 이 동의는 별도의 홍보·광고 수신 동의로 사용하지 않습니다.
+            선택한 조건에 따른 예상 비용·준비 기간 산정 및 안내, 신청하신 사회복지사 과정 문의에 대한 전화·문자 답변과 후속 상담.
           </dd>
           <dt>연락 방법</dt>
           <dd>비용·기간 안내 후 전화 또는 문자로 이번 문의에 대한 추가 상담 안내를 드릴 수 있습니다.</dd>
-          <dt>보유·이용 기간</dt>
-          <dd id="privacy-retention">{LIVE ? LEAD_FORM_CONFIG.retentionPeriod : '실제 운영 기준 설정 예정'}</dd>
           <dt>동의 거부 안내</dt>
           <dd>
             동의를 거부할 수 있습니다. 거부 시 이 신청서를 통한 비용·기간 및 상담 안내가 제한됩니다. 이미 신청한 상담의 추가 연락 중단은 연락한 담당자에게 요청하실 수 있습니다.
           </dd>
         </dl>
-        <form method="dialog">
-          <button className="button full">확인했어요</button>
-        </form>
-      </dialog>
-
-      <dialog className="privacy-dialog" id="marketing-dialog" aria-labelledby="marketing-title" ref={marketingRef} onClick={onPrivacyClick}>
-        <h2 id="marketing-title">[선택] 광고성 정보 수신 동의</h2>
-        <p>(주)한평생그룹은 이벤트 안내를 위해 휴대폰 번호로 광고성 정보를 발송해요. 발송 채널은 SMS, 알림톡이며, 보유 기간은 동의 철회 시까지예요.</p>
-        <dl>
-          <dt>수집 및 이용 목적</dt>
-          <dd>이벤트 안내(광고성 정보 발송)</dd>
-          <dt>수집 항목</dt>
-          <dd>휴대폰 번호</dd>
-          <dt>발송 채널</dt>
-          <dd>SMS, 알림톡</dd>
-          <dt>보유 기간</dt>
-          <dd>동의 철회 시까지</dd>
-          <dt>거부 권리 및 거부 시 불이익</dt>
-          <dd>동의를 거부할 수 있어요. 거부해도 상담 신청에는 불이익이 없고, 동의한 뒤에도 언제든 무료수신거부로 철회할 수 있어요.</dd>
-        </dl>
+        <div className="privacy-text">
+          <h3>개인정보 수집 · 이용 동의</h3>
+          <p>회사는 수집한 개인정보를 다음의 목적을 위해 활용합니다.</p>
+          <p>
+            학점은행제 교육과정 이용에 필요한 사항 제공 및 안내
+            <br />
+            신규 서비스 및 연수과정 홍보, 이벤트 및 광고성 정보 제공 및 참여기회 제공
+          </p>
+          <p>
+            수집하는 개인 정보 항목 : 이름, 연락처, 관심과정
+            <br />
+            보유 및 이용기간 : 신청일 기준 3년 이내
+            <br />
+            보존근거 : 소비자보호에 관한 법률 시행령 제6조 제3항
+          </p>
+        </div>
         <form method="dialog">
           <button className="button full">확인했어요</button>
         </form>
